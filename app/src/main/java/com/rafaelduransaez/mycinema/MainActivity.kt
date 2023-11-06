@@ -15,6 +15,12 @@ import com.rafaelduransaez.mycinema.ui.theme.MyCinemaTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.main_activity_layout)
+
+        //setComposable()
+    }
+
+    private fun setComposable() {
         setContent {
             MyCinemaTheme {
                 // A surface container using the 'background' color from the theme
@@ -25,8 +31,7 @@ class MainActivity : ComponentActivity() {
                     Greeting("Rafa")
                 }
             }
-        }
-    }
+        }    }
 }
 
 @Composable
