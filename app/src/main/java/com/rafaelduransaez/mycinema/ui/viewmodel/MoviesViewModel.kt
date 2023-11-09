@@ -1,8 +1,9 @@
-package com.rafaelduransaez.mycinema
+package com.rafaelduransaez.mycinema.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rafaelduransaez.domain.entities.Movie
+import com.rafaelduransaez.domain.mappers.toMovie
 import com.rafaelduransaez.framework.api.RetrofitClient
 import com.rafaelduransaez.mycinema.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MoviesViewModel @Inject constructor(): ViewModel() {
 
-    private var _state: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    private var _state: MutableStateFlow<UiState> = MutableStateFlow(UiState(loading = true))
     val state: StateFlow<UiState> = _state.asStateFlow()
 
     init {
@@ -25,7 +26,7 @@ class MoviesViewModel @Inject constructor(): ViewModel() {
     private fun listPopularMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             val movies = RetrofitClient.service.popularMovies(Constants.api_key)
-                .results.map { Movie(it.title, it.posterPath) }
+                .results.map { it.toMovie()}
             _state.value = UiState(
                 loading = false, movies = movies
             )
