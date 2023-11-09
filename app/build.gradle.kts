@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    //id("com.google.devtools.ksp")
 }
 
 android {
@@ -42,13 +43,30 @@ android {
         }
     }
 
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs>().configureEach {
+        kotlinOptions {
+            jvmTarget="1.8"
+        }
+    }
+
+    /*
+    //Just in case to use ksp instead of kapt
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+     */
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
 
     buildFeatures {
+        dataBinding = true
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
@@ -91,6 +109,10 @@ dependencies {
     //Hilt
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")
+
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    kapt("com.github.bumptech.glide:compiler:4.15.1")
 
     //Test
     testImplementation("junit:junit:4.13.2")

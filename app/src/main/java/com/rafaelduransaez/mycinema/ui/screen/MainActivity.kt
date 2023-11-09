@@ -1,6 +1,7 @@
-package com.rafaelduransaez.mycinema
+package com.rafaelduransaez.mycinema.ui.screen
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -14,8 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.rafaelduransaez.mycinema.databinding.MainActivityLayoutBinding
 import com.rafaelduransaez.mycinema.extensions.toast
+import com.rafaelduransaez.mycinema.ui.adapters.MoviesAdapter
 import com.rafaelduransaez.mycinema.ui.theme.MyCinemaTheme
+import com.rafaelduransaez.mycinema.ui.viewmodel.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,18 +38,24 @@ class MainActivity : ComponentActivity() {
      */
 
     private val viewModel: MoviesViewModel by viewModels()
+    private val adapter = MoviesAdapter {
+        toast("Clicked movie: ${it.id}: ${it.title}")
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.main_activity_layout)
+        val binding = MainActivityLayoutBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        binding.recycler.adapter = adapter
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect {
-                    toast(it.movies.size.toString())
+                    adapter.submitList(it.movies)
+                    toast("Movies loaded: ${it.movies.size}", Toast.LENGTH_SHORT)
                 }
             }
         }
