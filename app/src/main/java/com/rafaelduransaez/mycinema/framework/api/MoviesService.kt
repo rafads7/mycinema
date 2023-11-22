@@ -1,4 +1,4 @@
-package com.rafaelduransaez.framework.api
+package com.rafaelduransaez.mycinema.framework.api
 
 import com.rafaelduransaez.domain.service_entities.RemoteMoviesResult
 import retrofit2.http.GET

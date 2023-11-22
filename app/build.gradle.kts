@@ -82,11 +82,12 @@ dependencies {
     val navVersion = "2.7.5"
     val lifecycleVersion = "2.6.2"
     val daggerVersion = "2.48.1"
+    val retrofitVersion = "2.9.0"
+    val okhttpVersion = "4.11.0"
 
 
     implementation(project(mapOf("path" to ":domain")))
     implementation(project(mapOf("path" to ":data")))
-    implementation(project(mapOf("path" to ":framework")))
     implementation(project(mapOf("path" to ":usecases")))
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -127,6 +128,17 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    //Location
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    //Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+
+    //OkHttp
+    implementation ("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation ("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
 }
 
 // Allow references to generated code
