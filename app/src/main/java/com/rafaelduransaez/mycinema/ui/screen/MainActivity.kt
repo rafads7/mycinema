@@ -1,5 +1,6 @@
 package com.rafaelduransaez.mycinema.ui.screen
 
+import android.Manifest
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.rafaelduransaez.mycinema.databinding.MainActivityLayoutBinding
 import com.rafaelduransaez.mycinema.extensions.toast
+import com.rafaelduransaez.mycinema.framework.PermissionManager
 import com.rafaelduransaez.mycinema.ui.adapters.MoviesAdapter
 import com.rafaelduransaez.mycinema.ui.theme.MyCinemaTheme
 import com.rafaelduransaez.mycinema.ui.viewmodel.MoviesViewModel
@@ -27,15 +29,8 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
 
-    /*
-    private val permissionsLauncher: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            lifecycleScope.launch {
-                //val location = getLocation(isGranted)
-            }
-        }
+    private val permissionManager = PermissionManager(this, Manifest.permission.ACCESS_FINE_LOCATION)
 
-     */
 
     private val viewModel: MoviesViewModel by viewModels()
     private val adapter = MoviesAdapter {
@@ -51,6 +46,14 @@ class MainActivity : ComponentActivity() {
 
         binding.recycler.adapter = adapter
 
+
+
+        lifecycleScope.launch {
+            permissionManager.request()
+            viewModel.onLocationPermissionRequested()
+        }
+
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect {
@@ -59,15 +62,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        //permissionsLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        /*
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.listPopularMovies()
-        }
-
-         */
 
         //setComposable()
     }

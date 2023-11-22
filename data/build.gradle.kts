@@ -14,4 +14,8 @@ kotlin {
 
 dependencies {
     implementation(project(mapOf("path" to ":domain")))
+
+    //JavaX
+    implementation ("javax.inject:javax.inject:1")
+
 }
